@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Giselle.Commons">
-      <HintPath>..\..\Libs\Giselle.Commons\Giselle.Commons.dll</HintPath>
+      <HintPath>..\Libs\Giselle.Commons\Giselle.Commons.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
