@@ -48,7 +48,6 @@ namespace PastebinAPIs.Test
             data.Name = user.ReadInput("Enter Paste Name").AsString;
             data.Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break"));
             data.Private = user.QueryInput("Enter Private", EnumUtils.GetValues<PastePrivate>(), v => v.ToString()).Value;
-            data.Format = "text";
             data.ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value;
 
             var uri = api.CreateNewPaste(data);
