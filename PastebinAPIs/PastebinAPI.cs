@@ -10,7 +10,7 @@ using System.Web;
 
 namespace PastebinAPIs
 {
-    public class PastbinAPI
+    public class PastebinAPI
     {
         public WebExplorer Explorer { get; }
         public string BaseUri { get; }
@@ -18,7 +18,7 @@ namespace PastebinAPIs
 
         public string APIKey { get; set; } = null;
 
-        public PastbinAPI()
+        public PastebinAPI()
         {
             this.Explorer = new WebExplorer();
             this.BaseUri = "https://pastebin.com/api/api_post.php";

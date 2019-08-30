@@ -10,7 +10,7 @@ namespace PastebinAPIs.Test
 {
     public class Program
     {
-        public delegate void TestDelegate(UserAbstract user, PastbinAPI api, string userKey);
+        public delegate void TestDelegate(UserAbstract user, PastebinAPI api, string userKey);
 
         public static void Main(string[] args)
         {
@@ -41,7 +41,7 @@ namespace PastebinAPIs.Test
 
         }
 
-        public static void TestPaste(UserAbstract user, PastbinAPI api, string userKey)
+        public static void TestPaste(UserAbstract user, PastebinAPI api, string userKey)
         {
             var data = new PasteData();
             data.UserKey = userKey;
@@ -64,13 +64,13 @@ namespace PastebinAPIs.Test
             return defaultUser;
         }
 
-        public static (PastbinAPI api, string userKey) Create(UserAbstract user)
+        public static (PastebinAPI api, string userKey) Create(UserAbstract user)
         {
             var apiKey = user.ReadInput("Enter API Key").AsString;
             var name = user.ReadInput("Enter User Name").AsString;
             var password = user.ReadInput("Enter User Password").AsString;
 
-            var api = new PastbinAPI();
+            var api = new PastebinAPI();
             api.APIKey = apiKey;
 
             string userKey = null;
