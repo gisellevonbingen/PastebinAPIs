@@ -1,6 +1,15 @@
 # PastebinAPIs
 C# Pastebin APIs
 
+## References
+* https://pastebin.com/api
+
+## Dependencies
+* [Giselle.Commons](https://github.com/gisellevonbingen/Giselle.Commons)
+* [Newtonsoft.Json](https://www.newtonsoft.com/json)
+* System.Web
+
+
 ## Examples
 
 ### Creating A New Paste
@@ -95,13 +104,3 @@ catch (PastebinException e)
 	Console.WriteLine("Error Message : " + e.Message);
 }
 ```
-
-
-## References
-
-* https://pastebin.com/api
-
-## Dependencies
-* [Giselle.Commons](https://github.com/gisellevonbingen/Giselle.Commons)
-* [Newtonsoft.Json](https://www.newtonsoft.com/json)
-* System.Web
