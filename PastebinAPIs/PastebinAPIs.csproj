@@ -59,8 +59,10 @@
     <Compile Include="PastebinAPIResponse.cs" />
     <Compile Include="PasteCreateRequest.cs" />
     <Compile Include="PasteData.cs" />
+    <Compile Include="PasteDeleteRequest.cs" />
     <Compile Include="PasteExpireDate.cs" />
     <Compile Include="PasteListRequest.cs" />
+    <Compile Include="PasteLoginRequest.cs" />
     <Compile Include="PastePrivate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryValue.cs" />

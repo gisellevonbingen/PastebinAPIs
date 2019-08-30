@@ -26,7 +26,7 @@ namespace PastebinAPIs
             this.LoginUri = "https://pastebin.com/api/api_login.php";
         }
 
-        public WebRequestParameter CreateRequest(string uri, QueryValues values)
+        public WebRequestParameter CreateWebRequest(string uri, QueryValues values)
         {
             var apiKeyName = "api_dev_key";
             var overrides = new QueryValues(values);
@@ -42,7 +42,7 @@ namespace PastebinAPIs
             return request;
         }
 
-        public string Request(WebRequestParameter request)
+        public string ProcessWebRequest(WebRequestParameter request)
         {
             using (var response = this.Explorer.Request(request))
             {
@@ -60,45 +60,45 @@ namespace PastebinAPIs
 
         }
 
-        public string Login(string name, string password)
+        public string Login(PasteLoginRequest request)
         {
             var queryValues = new QueryValues();
-            queryValues.Add("api_user_name", name);
-            queryValues.Add("api_user_password", password);
+            queryValues.Add("api_user_name", request.Name);
+            queryValues.Add("api_user_password", request.Password);
 
-            var request = this.CreateRequest(this.LoginUri, queryValues);
-            var userKey = this.Request(request);
+            var webRequest = this.CreateWebRequest(this.LoginUri, queryValues);
+            var userKey = this.ProcessWebRequest(webRequest);
 
             return userKey;
         }
 
-        public string CreatePaste(PasteCreateRequest data)
+        public string CreatePaste(PasteCreateRequest request)
         {
             var queryValues = new QueryValues();
             queryValues.Add("api_option", "paste");
-            queryValues.Add("api_user_key", data.UserKey);
-            queryValues.Add("api_paste_private", ((byte)data.Private).ToString());
-            queryValues.Add("api_paste_name", HttpUtility.UrlEncode(data.Name));
-            queryValues.Add("api_paste_expire_date", data.ExpireDate?.Value);
-            queryValues.Add("api_paste_format", data.Format);
+            queryValues.Add("api_user_key", request.UserKey);
+            queryValues.Add("api_paste_private", ((byte)request.Private).ToString());
+            queryValues.Add("api_paste_name", HttpUtility.UrlEncode(request.Name));
+            queryValues.Add("api_paste_expire_date", request.ExpireDate?.Value);
+            queryValues.Add("api_paste_format", request.Format);
             queryValues.Add("api_dev_key", this.APIKey);
-            queryValues.Add("api_paste_code", HttpUtility.UrlEncode(data.Code));
+            queryValues.Add("api_paste_code", HttpUtility.UrlEncode(request.Code));
 
-            var request = this.CreateRequest(this.BaseUri, queryValues);
-            var url = this.Request(request);
+            var webRequest = this.CreateWebRequest(this.BaseUri, queryValues);
+            var url = this.ProcessWebRequest(webRequest);
 
             return url;
         }
 
-        public PasteData[] ListPastes(PasteListRequest data)
+        public PasteData[] ListPastes(PasteListRequest request)
         {
             var queryValues = new QueryValues();
             queryValues.Add("api_option", "list");
-            queryValues.Add("api_user_key", data.UserKey);
-            queryValues.Add("api_results_limit", data.ResultsLimit);
+            queryValues.Add("api_user_key", request.UserKey);
+            queryValues.Add("api_results_limit", request.ResultsLimit);
 
-            var request = this.CreateRequest(this.BaseUri, queryValues);
-            var html = this.Request(request);
+            var webRequest = this.CreateWebRequest(this.BaseUri, queryValues);
+            var html = this.ProcessWebRequest(webRequest);
             var document = new HtmlDocument();
             document.LoadHtml(html);
 
@@ -106,6 +106,19 @@ namespace PastebinAPIs
             var pasteArray = pasteNodes.Select(n => new PasteData(n)).ToArray();
 
             return pasteArray;
+        }
+
+        public bool DeletePaste(PasteDeleteRequest request)
+        {
+            var queryValues = new QueryValues();
+            queryValues.Add("api_option", "delete");
+            queryValues.Add("api_user_key", request.UserKey);
+            queryValues.Add("api_paste_key", request.PasteKey);
+
+            var webRequest = this.CreateWebRequest(this.BaseUri, queryValues);
+            var result = this.ProcessWebRequest(webRequest);
+
+            return result.Equals("Paste Removed", StringComparison.OrdinalIgnoreCase);
         }
 
     }

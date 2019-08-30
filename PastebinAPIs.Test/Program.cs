@@ -24,6 +24,7 @@ namespace PastebinAPIs.Test
             var tests = new Dictionary<string, TestDelegate>();
             tests["psate"] = TestPaste;
             tests["list"] = TestList;
+            tests["delete"] = TestDelete;
 
             while (true)
             {
@@ -77,6 +78,16 @@ namespace PastebinAPIs.Test
             user.SendMessageAsReflection("ListPastes", array);
         }
 
+        public static void TestDelete(UserAbstract user, PastebinAPI api, string userKey)
+        {
+            var request = new PasteDeleteRequest();
+            request.UserKey = userKey;
+            request.PasteKey = user.ReadInput("Enter Paste Key").AsString;
+
+            var result = api.DeletePaste(request);
+            user.SendMessage("Result : " + result);
+        }
+
         public static UserAbstract ParseArgs(string[] args, UserConsole defaultUser)
         {
             if (args.Length == 1)
@@ -100,7 +111,7 @@ namespace PastebinAPIs.Test
 
             if (string.IsNullOrWhiteSpace(name) == false && string.IsNullOrWhiteSpace(password) == false)
             {
-                userKey = api.Login(name, password);
+                userKey = api.Login(new PasteLoginRequest() { Name = name, Password = password });
             }
 
             return (api, userKey);
