@@ -42,7 +42,7 @@ var userKey = api.Login(loginRequest);
 Console.WriteLine("UserKey : " + userKey);
 ```
 
-### List Own's Pastes
+### List Own Pastes
 ```CSharp
 var api = new PastebinAPI();
 api.APIKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
