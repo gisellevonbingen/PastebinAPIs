@@ -1,5 +1,6 @@
 ﻿using Giselle.Commons;
 using Giselle.Commons.Web;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,16 +26,18 @@ namespace PastebinAPIs
             this.LoginUri = "https://pastebin.com/api/api_login.php";
         }
 
-        public WebRequestParameter CreateRequest(string uri, Dictionary<string, string> parameters)
+        public WebRequestParameter CreateRequest(string uri, QueryValues values)
         {
-            var overrideParameters = new Dictionary<string, string>(parameters);
-            overrideParameters["api_dev_key"] = this.APIKey;
+            var apiKeyName = "api_dev_key";
+            var overrides = new QueryValues(values);
+            overrides.RemoveAll(apiKeyName);
+            overrides.Add(apiKeyName, this.APIKey);
 
             var request = new WebRequestParameter();
             request.Method = "POST";
             request.Uri = uri;
             request.ContentType = "application/x-www-form-urlencoded";
-            request.WriteParameter = EnumerableUtils.Join(overrideParameters, "&", pair => $"{pair.Key}={pair.Value}");
+            request.WriteParameter = overrides.ToString(false, false);
 
             return request;
         }
@@ -59,32 +62,50 @@ namespace PastebinAPIs
 
         public string Login(string name, string password)
         {
-            var map = new Dictionary<string, string>();
-            map["api_user_name"] = name;
-            map["api_user_password"] = password;
+            var queryValues = new QueryValues();
+            queryValues.Add("api_user_name", name);
+            queryValues.Add("api_user_password", password);
 
-            var request = this.CreateRequest(this.LoginUri, map);
+            var request = this.CreateRequest(this.LoginUri, queryValues);
             var userKey = this.Request(request);
 
             return userKey;
         }
 
-        public string CreateNewPaste(PasteData data)
+        public string CreatePaste(PasteCreateRequest data)
         {
-            var map = new Dictionary<string, string>();
-            map["api_option"] = "paste";
-            map["api_user_key"] = data.UserKey;
-            map["api_paste_private"] = ((byte)data.Private).ToString();
-            map["api_paste_name"] = HttpUtility.UrlEncode(data.Name);
-            map["api_paste_expire_date"] = data.ExpireDate?.Value;
-            map["api_paste_format"] = data.Format;
-            map["api_dev_key"] = this.APIKey;
-            map["api_paste_code"] = HttpUtility.UrlEncode(data.Code);
+            var queryValues = new QueryValues();
+            queryValues.Add("api_option", "paste");
+            queryValues.Add("api_user_key", data.UserKey);
+            queryValues.Add("api_paste_private", ((byte)data.Private).ToString());
+            queryValues.Add("api_paste_name", HttpUtility.UrlEncode(data.Name));
+            queryValues.Add("api_paste_expire_date", data.ExpireDate?.Value);
+            queryValues.Add("api_paste_format", data.Format);
+            queryValues.Add("api_dev_key", this.APIKey);
+            queryValues.Add("api_paste_code", HttpUtility.UrlEncode(data.Code));
 
-            var request = this.CreateRequest(this.BaseUri, map);
-            var uri = this.Request(request);
+            var request = this.CreateRequest(this.BaseUri, queryValues);
+            var url = this.Request(request);
 
-            return uri;
+            return url;
+        }
+
+        public PasteData[] ListPastes(PasteListRequest data)
+        {
+            var queryValues = new QueryValues();
+            queryValues.Add("api_option", "list");
+            queryValues.Add("api_user_key", data.UserKey);
+            queryValues.Add("api_results_limit", data.ResultsLimit);
+
+            var request = this.CreateRequest(this.BaseUri, queryValues);
+            var html = this.Request(request);
+            var document = new HtmlDocument();
+            document.LoadHtml(html);
+
+            var pasteNodes = document.DocumentNode.ChildNodes.Where(n => n.Name.Equals("paste")).ToArray();
+            var pasteArray = pasteNodes.Select(n => new PasteData(n)).ToArray();
+
+            return pasteArray;
         }
 
     }

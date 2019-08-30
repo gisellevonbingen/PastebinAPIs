@@ -39,6 +39,9 @@
     <Reference Include="Giselle.Commons">
       <HintPath>..\Libs\Giselle.Commons\Giselle.Commons.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.12.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.12\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -50,16 +53,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HttpUtility2.cs" />
     <Compile Include="PastebinAPI.cs" />
     <Compile Include="PastebinException.cs" />
     <Compile Include="PastebinAPIResponse.cs" />
+    <Compile Include="PasteCreateRequest.cs" />
     <Compile Include="PasteData.cs" />
     <Compile Include="PasteExpireDate.cs" />
+    <Compile Include="PasteListRequest.cs" />
     <Compile Include="PastePrivate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryValue.cs" />
+    <Compile Include="QueryValues.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

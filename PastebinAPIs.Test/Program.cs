@@ -22,36 +22,59 @@ namespace PastebinAPIs.Test
             user.SendMessage("User Key = " + userKey);
 
             var tests = new Dictionary<string, TestDelegate>();
-            tests["psate"] = (TestPaste);
+            tests["psate"] = TestPaste;
+            tests["list"] = TestList;
 
             while (true)
             {
-                user.SendMessage();
-                user.SendMessage();
-                var testQuery = user.QueryInput("Enter Test", tests, pair => pair.Key, true);
-
-                if (testQuery.Breaked == true)
+                try
                 {
-                    continue;
+                    user.SendMessage();
+                    user.SendMessage();
+                    var testQuery = user.QueryInput("Enter Test", tests, pair => pair.Key, true);
+
+                    if (testQuery.Breaked == true)
+                    {
+                        continue;
+                    }
+
+                    var test = testQuery.Value.Value;
+                    test(user, api, userKey);
+                }
+                catch (UserInputReturnException)
+                {
+
+                }
+                catch (Exception e)
+                {
+                    user.SendMessage(string.Concat(e));
                 }
 
-                var test = testQuery.Value.Value;
-                test(user, api, userKey);
             }
 
         }
 
         public static void TestPaste(UserAbstract user, PastebinAPI api, string userKey)
         {
-            var data = new PasteData();
-            data.UserKey = userKey;
-            data.Name = user.ReadInput("Enter Paste Name").AsString;
-            data.Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break"));
-            data.Private = user.QueryInput("Enter Private", EnumUtils.GetValues<PastePrivate>(), v => v.ToString()).Value;
-            data.ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value;
+            var request = new PasteCreateRequest();
+            request.UserKey = userKey;
+            request.Name = user.ReadInput("Enter Paste Name").AsString;
+            request.Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break"));
+            request.Private = user.QueryInput("Enter Private", EnumUtils.GetValues<PastePrivate>(), v => v.ToString()).Value;
+            request.ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value;
 
-            var uri = api.CreateNewPaste(data);
-            user.SendMessage(uri);
+            var url = api.CreatePaste(request);
+            user.SendMessage(url);
+        }
+
+        public static void TestList(UserAbstract user, PastebinAPI api, string userKey)
+        {
+            var request = new PasteListRequest();
+            request.UserKey = userKey;
+            request.ResultsLimit = user.ReadInput("Enter Input").AsInt;
+
+            var array = api.ListPastes(request);
+            user.SendMessageAsReflection("ListPastes", array);
         }
 
         public static UserAbstract ParseArgs(string[] args, UserConsole defaultUser)
