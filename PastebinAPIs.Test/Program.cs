@@ -71,7 +71,7 @@ namespace PastebinAPIs.Test
         {
             var request = new PasteListRequest();
             request.UserKey = userKey;
-            request.ResultsLimit = user.ReadInput("Enter Input").AsInt;
+            request.ResultsLimit = user.ReadInput("Enter Results Limit, Nullable").AsInt;
 
             var array = api.ListPastes(request);
             user.SendMessageAsReflection("ListPastes", array);
