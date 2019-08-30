@@ -75,6 +75,28 @@ var result = api.DeletePaste(listRequest);
 Console.WriteLine("Delete Result : " + result);
 ```
 
+### Catching Exception
+```CSharp
+try
+{
+	var api = new PastebinAPI();
+	api.APIKey = "invalid api key";
+
+	var loginRequest = new PasteLoginRequest();
+	loginRequest.Name = "invalid name";
+	loginRequest.Password = "invalid password";
+
+	var userKey = api.Login(loginRequest);
+
+	Console.WriteLine("Should Not Print");
+}
+catch (PastebinException e)
+{
+	Console.WriteLine("Error Message : " + e.Message);
+}
+```
+
+
 ## References
 
 * https://pastebin.com/api
