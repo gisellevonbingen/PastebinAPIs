@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Giselle.Commons;
 using PastebinAPIs;
 
 namespace PastebinAPIs.Test
 {
     public class Program
     {
+        public delegate void TestDelegate(UserAbstract user, PastbinAPI api, string userKey);
+
         public static void Main(string[] args)
         {
             var user = new UserConsole();
@@ -18,16 +21,37 @@ namespace PastebinAPIs.Test
             user.SendMessage("API Key = " + api.APIKey);
             user.SendMessage("User Key = " + userKey);
 
+            var tests = new Dictionary<string, TestDelegate>();
+            tests["psate"] = (TestPaste);
+
+            while (true)
+            {
+                user.SendMessage();
+                user.SendMessage();
+                var testQuery = user.QueryInput("Enter Test", tests, pair => pair.Key, true);
+
+                if (testQuery.Breaked == true)
+                {
+                    continue;
+                }
+
+                var test = testQuery.Value.Value;
+                test(user, api, userKey);
+            }
+
+        }
+
+        public static void TestPaste(UserAbstract user, PastbinAPI api, string userKey)
+        {
             var data = new PasteData();
             data.UserKey = userKey;
-            data.Code = "Just Test";
-            data.Private = PastePrivate.Public;
-            data.Name = "TEST";
+            data.Name = user.ReadInput("Enter Paste Name").AsString;
+            data.Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break"));
+            data.Private = user.QueryInput("Enter Private", EnumUtils.GetValues<PastePrivate>(), v => v.ToString()).Value;
             data.Format = "text";
-            data.ExpireDate = PasteExpireDate.Never;
-            var uri = api.CreateNewPaste(data);
+            data.ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value;
 
-            user.SendMessage();
+            var uri = api.CreateNewPaste(data);
             user.SendMessage(uri);
         }
 
