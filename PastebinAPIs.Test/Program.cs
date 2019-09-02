@@ -26,6 +26,7 @@ namespace PastebinAPIs.Test
             tests["list"] = TestList;
             tests["delete"] = TestDelete;
             tests["user"] = TestUser;
+            tests["raw"] = TestRaw;
 
             while (true)
             {
@@ -93,6 +94,17 @@ namespace PastebinAPIs.Test
         {
             var puser = api.GetUser(userKey);
             user.SendMessageAsReflection("GetUser", puser);
+        }
+
+        public static void TestRaw(UserAbstract user, PastebinAPI api, string userKey)
+        {
+            var request = new PasteGetRawRequest();
+            request.UserKey = userKey;
+            request.PasteKey = user.ReadInput("Enter Paste Key").AsString;
+
+            var raw = api.GetPasteRaw(request);
+            user.SendMessage("=== RAW ===");
+            user.SendMessage(raw);
         }
 
         public static UserAbstract ParseArgs(string[] args, UserConsole defaultUser)

@@ -16,6 +16,7 @@ namespace PastebinAPIs
         public WebExplorer Explorer { get; }
         public string BaseUri { get; }
         public string LoginUri { get; }
+        public string RawUri { get; }
 
         public string APIKey { get; set; } = null;
 
@@ -24,6 +25,7 @@ namespace PastebinAPIs
             this.Explorer = new WebExplorer();
             this.BaseUri = "https://pastebin.com/api/api_post.php";
             this.LoginUri = "https://pastebin.com/api/api_login.php";
+            this.RawUri = "https://pastebin.com/api/api_raw.php";
         }
 
         public WebRequestParameter CreateWebRequest(string uri, QueryValues values)
@@ -136,6 +138,19 @@ namespace PastebinAPIs
             var user = new PasteUser(userNode);
 
             return user;
+        }
+
+        public string GetPasteRaw(PasteGetRawRequest request)
+        {
+            var queryValues = new QueryValues();
+            queryValues.Add("api_option", "show_paste");
+            queryValues.Add("api_user_key", request.UserKey);
+            queryValues.Add("api_paste_key", request.PasteKey);
+
+            var webRequest = this.CreateWebRequest(this.RawUri, queryValues);
+            var raw = this.ProcessWebRequest(webRequest);
+
+            return raw;
         }
 
     }

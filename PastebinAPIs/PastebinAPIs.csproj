@@ -61,6 +61,7 @@
     <Compile Include="PasteData.cs" />
     <Compile Include="PasteDeleteRequest.cs" />
     <Compile Include="PasteExpireDate.cs" />
+    <Compile Include="PasteGetRawRequest.cs" />
     <Compile Include="PasteListRequest.cs" />
     <Compile Include="PasteLoginRequest.cs" />
     <Compile Include="PastePrivate.cs" />
