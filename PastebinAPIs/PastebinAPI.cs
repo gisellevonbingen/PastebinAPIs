@@ -121,6 +121,23 @@ namespace PastebinAPIs
             return result.Equals("Paste Removed", StringComparison.OrdinalIgnoreCase);
         }
 
+        public PasteUser GetUser(string userKey)
+        {
+            var queryValues = new QueryValues();
+            queryValues.Add("api_option", "userdetails");
+            queryValues.Add("api_user_key", userKey);
+
+            var webRequest = this.CreateWebRequest(this.BaseUri, queryValues);
+            var html = this.ProcessWebRequest(webRequest);
+            var document = new HtmlDocument();
+            document.LoadHtml(html);
+
+            var userNode = document.DocumentNode.ChildNodes["user"];
+            var user = new PasteUser(userNode);
+
+            return user;
+        }
+
     }
 
 }

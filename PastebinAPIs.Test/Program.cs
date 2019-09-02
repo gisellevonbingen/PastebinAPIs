@@ -25,6 +25,7 @@ namespace PastebinAPIs.Test
             tests["psate"] = TestPaste;
             tests["list"] = TestList;
             tests["delete"] = TestDelete;
+            tests["user"] = TestUser;
 
             while (true)
             {
@@ -86,6 +87,12 @@ namespace PastebinAPIs.Test
 
             var result = api.DeletePaste(request);
             user.SendMessage("Result : " + result);
+        }
+
+        public static void TestUser(UserAbstract user, PastebinAPI api, string userKey)
+        {
+            var puser = api.GetUser(userKey);
+            user.SendMessageAsReflection("GetUser", puser);
         }
 
         public static UserAbstract ParseArgs(string[] args, UserConsole defaultUser)

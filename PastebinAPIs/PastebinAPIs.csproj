@@ -64,6 +64,8 @@
     <Compile Include="PasteListRequest.cs" />
     <Compile Include="PasteLoginRequest.cs" />
     <Compile Include="PastePrivate.cs" />
+    <Compile Include="PasteUser.cs" />
+    <Compile Include="PasteUserAccountType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryValue.cs" />
     <Compile Include="QueryValues.cs" />
