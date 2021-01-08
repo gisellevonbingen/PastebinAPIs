@@ -46,21 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="History.cs" />
-    <Compile Include="InputEditHistory.cs" />
-    <Compile Include="InputEditSnapshot.cs" />
-    <Compile Include="InputEditType.cs" />
-    <Compile Include="InputResult.cs" />
-    <Compile Include="ObjectUtils2.cs" />
-    <Compile Include="PrintableLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryResult.cs" />
-    <Compile Include="UserAbstract.cs" />
-    <Compile Include="UserConsole.cs" />
-    <Compile Include="UserExtensions.cs" />
-    <Compile Include="UserFile.cs" />
-    <Compile Include="UserInputReturnException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

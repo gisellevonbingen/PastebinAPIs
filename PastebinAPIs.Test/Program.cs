@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Giselle.Commons;
+using Giselle.Commons.Enums;
+using Giselle.Commons.Users;
 using PastebinAPIs;
 
 namespace PastebinAPIs.Test
@@ -63,7 +65,7 @@ namespace PastebinAPIs.Test
             request.UserKey = userKey;
             request.Name = user.ReadInput("Enter Paste Name").AsString;
             request.Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break"));
-            request.Private = user.QueryInput("Enter Private", EnumUtils.GetValues<PastePrivate>(), v => v.ToString()).Value;
+            request.Private = user.QueryInput("Enter Private", EnumUtils.Values<PastePrivate>(), v => v.ToString()).Value;
             request.ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value;
 
             var url = api.CreatePaste(request);
