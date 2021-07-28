@@ -13,9 +13,7 @@ namespace PastebinAPIs
         public PastebinException() { }
         public PastebinException(string message) : base(message) { }
         public PastebinException(string message, Exception inner) : base(message, inner) { }
-        protected PastebinException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+        protected PastebinException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

@@ -23,12 +23,14 @@ namespace PastebinAPIs.Test
             user.SendMessage("API Key = " + api.APIKey);
             user.SendMessage("User Key = " + userKey);
 
-            var tests = new Dictionary<string, TestDelegate>();
-            tests["psate"] = TestPaste;
-            tests["list"] = TestList;
-            tests["delete"] = TestDelete;
-            tests["user"] = TestUser;
-            tests["raw"] = TestRaw;
+            var tests = new Dictionary<string, TestDelegate>
+            {
+                ["psate"] = TestPaste,
+                ["list"] = TestList,
+                ["delete"] = TestDelete,
+                ["user"] = TestUser,
+                ["raw"] = TestRaw
+            };
 
             while (true)
             {
@@ -61,12 +63,14 @@ namespace PastebinAPIs.Test
 
         public static void TestPaste(UserAbstract user, PastebinAPI api, string userKey)
         {
-            var request = new PasteCreateRequest();
-            request.UserKey = userKey;
-            request.Name = user.ReadInput("Enter Paste Name").AsString;
-            request.Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break"));
-            request.Private = user.QueryInput("Enter Private", EnumUtils.Values<PastePrivate>(), v => v.ToString()).Value;
-            request.ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value;
+            var request = new PasteCreateRequest
+            {
+                UserKey = userKey,
+                Name = user.ReadInput("Enter Paste Name").AsString,
+                Code = string.Join(Environment.NewLine, user.ReadInputWhileBreak("Enter Paste Text While Break").Select(ir => ir.AsString)),
+                Private = user.QueryInput("Enter Private", EnumUtils.Values<PastePrivate>(), v => v.ToString()).Value,
+                ExpireDate = user.QueryInput("Enter Expire Date", PasteExpireDate.Values, v => v.Name).Value
+            };
 
             var url = api.CreatePaste(request);
             user.SendMessage(url);
@@ -74,9 +78,11 @@ namespace PastebinAPIs.Test
 
         public static void TestList(UserAbstract user, PastebinAPI api, string userKey)
         {
-            var request = new PasteListRequest();
-            request.UserKey = userKey;
-            request.ResultsLimit = user.ReadInput("Enter Results Limit, Nullable").AsInt;
+            var request = new PasteListRequest
+            {
+                UserKey = userKey,
+                ResultsLimit = user.ReadInput("Enter Results Limit, Nullable").AsInt
+            };
 
             var array = api.ListPastes(request);
             user.SendMessageAsReflection("ListPastes", array);
@@ -84,9 +90,11 @@ namespace PastebinAPIs.Test
 
         public static void TestDelete(UserAbstract user, PastebinAPI api, string userKey)
         {
-            var request = new PasteDeleteRequest();
-            request.UserKey = userKey;
-            request.PasteKey = user.ReadInput("Enter Paste Key").AsString;
+            var request = new PasteDeleteRequest
+            {
+                UserKey = userKey,
+                PasteKey = user.ReadInput("Enter Paste Key").AsString
+            };
 
             var result = api.DeletePaste(request);
             user.SendMessage("Result : " + result);
@@ -100,9 +108,11 @@ namespace PastebinAPIs.Test
 
         public static void TestRaw(UserAbstract user, PastebinAPI api, string userKey)
         {
-            var request = new PasteGetRawRequest();
-            request.UserKey = userKey;
-            request.PasteKey = user.ReadInput("Enter Paste Key").AsString;
+            var request = new PasteGetRawRequest
+            {
+                UserKey = userKey,
+                PasteKey = user.ReadInput("Enter Paste Key").AsString
+            };
 
             var raw = api.GetPasteRaw(request);
             user.SendMessage("=== RAW ===");
@@ -125,8 +135,7 @@ namespace PastebinAPIs.Test
             var name = user.ReadInput("Enter User Name").AsString;
             var password = user.ReadInput("Enter User Password").AsString;
 
-            var api = new PastebinAPI();
-            api.APIKey = apiKey;
+            var api = new PastebinAPI { APIKey = apiKey };
 
             string userKey = null;
 
