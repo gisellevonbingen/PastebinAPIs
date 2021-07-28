@@ -2,9 +2,11 @@
 C# Pastebin APIs
 
 ## References
-* https://pastebin.com/api
+
+* https://pastebin.com/doc_api
 
 ## Dependencies
+
 * [Giselle.Commons](https://github.com/gisellevonbingen/Giselle.Commons)
 * [Newtonsoft.Json](https://www.newtonsoft.com/json)
 * System.Web
@@ -13,6 +15,7 @@ C# Pastebin APIs
 ## Examples
 
 ### Creating A New Paste
+
 ```CSharp
 var api = new PastebinAPI();
 api.APIKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -30,6 +33,7 @@ Console.WriteLine(url);
 ```
 
 ### User Login
+
 ```CSharp
 var api = new PastebinAPI();
 api.APIKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -43,6 +47,7 @@ Console.WriteLine("UserKey : " + userKey);
 ```
 
 ### List Own Pastes
+
 ```CSharp
 var api = new PastebinAPI();
 api.APIKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -66,6 +71,7 @@ foreach (var paste in pastes)
 ```
 
 ### Delete Own Paste
+
 ```CSharp
 var api = new PastebinAPI();
 api.APIKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -85,6 +91,7 @@ Console.WriteLine("Delete Result : " + result);
 ```
 
 ### Catching Exception
+
 ```CSharp
 try
 {
